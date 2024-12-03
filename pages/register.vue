@@ -13,6 +13,56 @@ const userRegisteObject = ref({
     detail: "",
   },
 });
+
+const postRegister = async () => {
+  try {
+    const res = await $fetch("/api/v1/user/signup", {
+      baseURL: "https://nuxr3.zeabur.app",
+      method: "POST",
+      body: userRegisteObject.value,
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      onResponse: ({ request, response, options }) => {
+        if (!response.ok) {
+          console.log(request);
+          console.log(response);
+          throw new Error(response._data.message);
+        }
+        return response._data;
+      },
+
+      onRequestError: ({ request, options, error }) => {
+        $swal.fire({
+          position: "center",
+          icon: "error",
+          title: "請求錯誤:" + error,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      },
+
+      onResponseError: ({ request, response, options }) => {
+        $swal.fire({
+          position: "center",
+          icon: "error",
+          title: "回應錯誤:" + response.statusText,
+          showConfirmButton: true,
+          timer: 3000,
+        });
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    $swal.fire({
+      position: "center",
+      icon: "error",
+      title: "錯誤:" + error,
+      showConfirmButton: true,
+    });
+  }
+};
 // 使用 sweetAlert2 套件顯示訊息
 // $swal.fire({
 //   position: "center",
@@ -38,6 +88,7 @@ const userRegisteObject = ref({
                   id="firstName"
                   placeholder="王小明"
                   required
+                  v-model="userRegisteObject.name"
                 />
                 <label for="firstName"
                   >姓名 <span class="text-danger">*</span></label
@@ -52,6 +103,7 @@ const userRegisteObject = ref({
                   placeholder="example@gmail.com"
                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                   required
+                  v-model="userRegisteObject.email"
                 />
                 <label for="email"
                   >信箱 <span class="text-danger">*</span></label
@@ -66,6 +118,7 @@ const userRegisteObject = ref({
                   placeholder="請輸入 8 碼以上密碼"
                   pattern=".{8,}"
                   required
+                  v-model="userRegisteObject.password"
                 />
                 <label for="password"
                   >密碼 <span class="text-danger">*</span></label
@@ -80,6 +133,7 @@ const userRegisteObject = ref({
                   placeholder="0912345678"
                   pattern="(\+886|0)?9\d{8}|(\+886|0)?2\d{8}|\d{3}-\d{4}-\d{4}"
                   required
+                  v-model="userRegisteObject.phone"
                 />
                 <label for="phone">電話</label>
               </div>
@@ -90,6 +144,7 @@ const userRegisteObject = ref({
                   class="form-control"
                   id="dateInput"
                   required
+                  v-model="userRegisteObject.birthday"
                 />
                 <label for="dateInput">出生年月日</label>
               </div>
@@ -104,6 +159,7 @@ const userRegisteObject = ref({
                       placeholder="100"
                       pattern="\d{3,}"
                       required
+                      v-model="userRegisteObject.address.zipcode"
                     />
                     <label for="zipcode">郵遞區號</label>
                   </div>
@@ -116,13 +172,14 @@ const userRegisteObject = ref({
                       id="address"
                       placeholder="台北市中正區重慶南路一段"
                       required
+                      v-model="userRegisteObject.address.detail"
                     />
                     <label for="address">詳細地址</label>
                   </div>
                 </div>
               </div>
 
-              <button class="btn btn-lg btn-primary w-100" type="submit">
+              <button class="btn btn-lg btn-primary w-100" @click="postRegister" type="submit">
                 註冊
               </button>
             </form>
