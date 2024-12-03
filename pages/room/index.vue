@@ -26,7 +26,7 @@ fetch(apiUrl)
   <div class="container mt-4">
     <div class="row justify-content-center gy-3">
       <div class="col-8 col-md-6 col-lg-3" v-for="room in roomsList">
-        <div class="card h-100 shadow-sm" @click="router.push('/room/_id')">
+        <div class="card h-100 shadow-sm" @click="router.push('/room/' + room._id)">
           <img :src="room.imageUrl" class="card-img-top" alt="Room Image" />
           <div class="card-body d-flex flex-column">
             <h3 class="card-title">{{ room.name }}</h3>
