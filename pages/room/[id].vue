@@ -36,6 +36,9 @@ useSeoMeta({
 });
 */
 
+const socialTitle = computed(() => `Freyja | ${roomObject.value.name}`);
+const seoUrl = computed(() => `https://freyja.travel.com.tw/room/${roomObject.value._id}`);
+
 const isProvide = function (isProvideBoolean = false) {
   return isProvideBoolean ? "提供" : "未提供";
 };
@@ -44,6 +47,16 @@ const isProvide = function (isProvideBoolean = false) {
 <template>
   <Head>
     <!-- 請在此處作答，使用元件設定頁面的 SEO Meta  -->
+    <Title>{{ roomObject.name }}</title>
+    <Meta name="description" :content="roomObject.description" />
+    <Meta property="og:title" :content="socialTitle" />
+    <Meta property="og:description" :content="roomObject.description" />
+    <Meta property="og:image" :content="roomObject.imageUrl" />
+    <Meta property="og:url" :content="seoUrl" />
+    <Meta name="twitter:card" content="summary_large_image" />
+    <Meta name="twitter:title" :content="socialTitle" />
+    <Meta name="twitter:description" :content="roomObject.description" />
+    <Meta name="twitter:image" :content="roomObject.imageUrl" />
   </Head>
 
   <h2>房型詳細頁面</h2>
