@@ -28,6 +28,8 @@ const loginAccount = async (requsetBody) => {
       timer: 1500,
     });
 
+    navigateTo("/orders");
+
   } catch (error) {
     const { message } = error.response._data;
     $swal.fire({
